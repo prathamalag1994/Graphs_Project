@@ -1,0 +1,227 @@
+
+GRADER
+
+Name of student running submit: Eeshan Agarwal
+Login of student running submit: cs61b-avq
+
+Second team member's name: Pratham Makhni Alag
+Second team member's login: cs61b-ar
+
+Third team member's name (if any): Jvalin Tejpal
+Third team member's login: cs61b-qx
+
+
+==DATA STRUCTURES IMPLEMENTED==
+-------------------------------
+Vertex.java 	
+[Graph Package]
+
+Description:
+Represents a Vertex of an WUGraph 
+
+Class Fields:
+protected Object value /* The value of the vertex */
+proected Dlist edges  /* Circular DList storing the edges connected to this vertex */
+-------------------------------
+Edge.java				
+[Graph Package]
+
+Description:
+Represents an Edge of an WUGraph
+
+Class Fields:
+protected VertexPair vPair /* Represents a pair of objects that act as vertices in the graph */
+protected int weight /* Represents the weight of this edge */
+protected DListNode otherEdge /* Represents the partner or 'half-edge' reference */ 
+-------------------------------
+KruskalEdge.java		
+[Graphalg Package]
+
+Description:
+Represents of an Edge for the pruposes of implmeneting the Kruskal algorithm for finding the minimum spanning tree
+
+Class Fields:
+private Object v1 /* Represents adjascent Vertices of edge (v1, v2) */
+private Object v2 /* Represents adjascent Vertices of (v1, v2) */
+private int weight /* Represents the weight of (v1, v2) edge */
+*/ 
+-------------------------------
+DList.java				
+[List Package]
+
+Description:
+A mutable doubly-linked list that's circularly-linked and employs a sentinel node at the head of the list. It is modified to be iterable and supported through DListIterator.java
+Used to hold a list of vertices of the class (internal representation) and also list of edges connected to a vertex
+-------------------------------
+DListNode.java			
+[List Package]
+
+Description:
+A mutable node in a DList (doubly-linked list)
+-------------------------------
+HashTableChained.java	
+[Dict Package]
+
+Description:
+HashTableChained implements a Dictionary as a hash table with chaining.
+Our version supports generic Entries and resizes when the load factor is greater than 1 
+Used to map the internal represenation of an edge/vertex to the application representation
+The Entry.key was the external representation while the Entry.value was the internal representation
+-------------------------------
+DisjointSets.java		
+[Set Package]
+
+Description:
+Represents a collection of sets that are disjoint, that is, no item is found in more than one set.
+If the edge was added to the graph, the edge's vertices were unioned. 
+-------------------------------
+Arrays
+Decription:
+Used to hold vertices (external representation) in getVertices() and hold neighboring vertices (external representation) along with their weights in getNeighbors()
+
+
+==========WUGraph Design=======
+-------------------------------
+WUGraph.java
+Description:
+WUGraph class represents a weighted, undirected graph
+Class Fields:
+int numVertices /* stores number of Vertices in the graph */
+int numEdges /* stores the number of Edges in the graph */
+DList list /* stores a circular DList containing a list of Vertex */
+HashTableChained vertexHash /* stores a Vertex Hastable that maps an application-suuplied vertex to the internal Vertex data structure  */
+HashTableChained edgeHash /* stores an Edge Hastable that maps an unordered pair of objects (application-supplied) to the internal Edge data structure */
+-------------------------------
+
+=========Kruskal Design========
+-------------------------------
+Kruskal.java
+Description:
+The Kruskal class contains the method minSpanTree(), which implements Kruskal's algorithm for computing a minimum spanning tree of a graph
+
+WUGraph tGraph /* store the newly constructed WUGraph that represents the MST of g */
+HashTableChained indices /* stores the vertices and maps it to a unique integer */
+KruskalEdge[] edges /* stores a sorted array (by weight) of edges */
+DisjointSets t /* stores a set of disjoint edges */
+-------------------------------
+
+===Implementation of methods====
+-------------------------------
+public void removeVertex(Object vertex)
+Running time: O(d)
+Each vertex is accessed from the Vertex hash table in O(1) time. Each edge that is connected to the vertex is removed by traversing the DList of edges, that is connected to the vertex, of length d- d is the degree of the vertex. RemoveEdge takes O(1) time as the edge is simply looked for in the Edge hash table and removed along with removing it from the DList of edges (again takes O(1) time) and since each edge has reference to its partner edge, one simply needs to call remove() on that partner node without looking up it's reference in the DList of Vertex. This proccess too takes only O(1) time and so the method takes at worst case O(d) time.
+-------------------------------
+public Object[] getVertices()
+Running time: O(|V|) 
+An array of Objects of size equal to the number of vertices is initialized. We iterate through the DList of vertices maintained in the class and subsequently call getVal() on very Vertex object (takes O(1) time) and add it to the array. As the proccess is repeatedly called a number equal to the number of vertices times, the method at worst case takes O(|V|) time.
+-------------------------------
+
+======Method Descriptions======
+-------------------------------
+Edge.java
+
+    /** 
+     * updateWeight() method to set the weight of the edge to the new input weight
+     * Running time: O(1)
+     * @Param Integer 
+     */
+    
+    void updateWeight (int)
+
+    /**
+     * weight() method returns the weight of the edge
+     * Running time: O(1)
+     * @Return Integer weight
+     */
+    int weight()
+
+    /**
+     * getPair() method returns the VertexPair of the edge
+     * Running time: O(1)
+     * @Return Object vPair
+     */
+    Object getPair()
+
+    /**
+     * otherEdge() method returns the other reference of the edge
+     * Running time: O(1)
+     * @Return DListNode otherEdge
+     */
+    DListNode otherEdge()
+
+    /**
+     * setHEdge() method sets the otherEdge reference to the input DListNode
+     * Running time: O(1)
+     * @Param DListNode
+     */
+    void setHEdge(DListNode)
+-------------------------------
+Vertex.java
+    /**
+     * getVal() method returns the value of the Vertex
+     * Running time: O(1)
+     * @Return Object value
+     */
+    Object getVal()
+
+     /**
+     * edges() method returns the DList of edges connected to this vertex
+     * Running time: O(1)
+     * @Return DList edges
+     */
+    DList edges()
+-------------------------------
+QuickSort.java
+	/**
+     *  Method to swap two KruskalEdge objects in an array.
+     *  @param an array of Kruskal Edges.
+     *  @param index of the first int to be swapped.
+     *  @param index of the second int to be swapped.
+     **/
+    public static void swapReferences(KruskalEdge[], int, int)
+
+    /**
+     *  This is a slightly modified version of C.A.R Hoare's Quick Sort algorithm.
+     *  This will handle arrays that are already sorted, and arrays with duplicate
+     *  keys.
+     *
+     *  If you think of an array as going from the lowest index on the left to
+     *  the highest index on the right then the parameters to this function are
+     *  lowest index or left and highest index or right.  The first time you call
+     *  this function it will be with the parameters 0, a.length - 1.
+     *
+     *  @param       a KruskalEsge array
+     *  @param       left boundary of array partition
+     *  @param       right boundary of array partition
+     **/
+    private static void quicksort(KruskalEdge[], int, int)
+-------------------------------
+KruskalEdge.java
+ 	/**
+     *  A comparison method that overrides the default method by returning
+     *  1 if weight of 'this' edge is greater than weight of the edge being
+     *  compared to. -1 if it is lesser and 0 if it is the same.
+     *
+     *  @param an Object intended to be a KruskalEdge
+     **/
+    public int compareTo(Object) 
+ 	
+ 	/**
+     *  Getter method that returns one vertex of a particular edge.
+     *  @Return Object
+     **/
+    public Object getV1()
+
+    /**
+     *  Getter method that returns other vertex of a particular edge.
+     *  @Return Object
+     **/
+    public Object getV2()
+
+     /**
+     *  Getter method that returns the weight of a particular edge.
+     *  @Return int
+     **/
+    public int getWeight()
+-------------------------------
+=============END===============
